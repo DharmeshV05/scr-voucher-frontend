@@ -1,38 +1,129 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+body {
+  font-family: Arial, sans-serif;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f4f4f4;
 }
 
-.App-link {
-  color: #61dafb;
+.voucher-container {
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 800px;
+  border-radius: 5px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.voucher-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.voucher-header img.logo {
+  height: 50px;
+}
+
+.voucher-header h1 {
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.voucher-info {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.voucher-info .form-group {
+  margin-bottom: 0;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.amount-details {
+  margin-bottom: 30px;
+}
+
+.amount-details label {
+  font-weight: bold;
+}
+
+.amount-inputs {
+  display: flex;
+  gap: 10px;
+}
+
+.amount-inputs input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.signatures {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.signature {
+  flex: 1;
+  min-width: 150px;
+  margin-bottom: 15px;
+}
+
+.signature label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.signature input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+#filterImage {
+  width: 100px;
+  height: auto;
+  display: none;
+}
+.input#data{
+  height: 15px;
+  
 }
