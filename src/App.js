@@ -26,12 +26,11 @@ const VoucherForm = () => {
     approvedBy: '',
     receiverSignature: '',
   });
-
   useEffect(() => {
     const fetchVoucherNo = async (filter) => {
       if (filter) {
         try {
-          const response = await axios.get(`/get-voucher-no?filter=${filter}`);
+          const response = await axios.get(`${url}/get-voucher-no?filter=${filter}`);
           setFormData((prevData) => ({
             ...prevData,
             voucherNo: response.data.voucherNo,
@@ -108,7 +107,7 @@ const VoucherForm = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('/submit', formData);
+      const response = await axios.post(`${url}/submit`, formData);
 
       if (response.status === 200) {
         toast.success('Data submitted successfully and PDF uploaded!');

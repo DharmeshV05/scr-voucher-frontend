@@ -24,9 +24,13 @@ body {
   margin-bottom: 20px;
 }
 
-.voucher-header img.logo {
+/* .voucher-header img.logo {
   height: 50px;
-}
+} */
+
+/* .filterImage {
+  height: 50px;
+} */
 
 .voucher-header h1 {
   font-size: 50px;
@@ -118,8 +122,17 @@ body {
   text-overflow: ellipsis;
 }
 
+#filterImageContainer {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  width: 300px;
+  height: 100px;
+}
+
 #filterImage {
-  width: 100px;
+  object-fit: contain;
+  width: 150px;
   height: auto;
   display: none;
 }
