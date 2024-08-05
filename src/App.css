@@ -1,3 +1,8 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 body {
   font-family: Arial, sans-serif;
   display: flex;
@@ -7,14 +12,22 @@ body {
   margin: 0;
   background-color: #f4f4f4;
 }
-
+.submit-button {
+  background-color: blueviolet;
+  color: white;
+  font-size: 16px;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 4px;
+}
 .voucher-container {
-  background: #fff;
+  position: relative;
+  background: white;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.1);
   width: 90%;
-  max-width: 800px;
-  border-radius: 5px;
+  max-width: 1000px;
+  border-radius: 10px;
 }
 
 .voucher-header {
@@ -32,10 +45,6 @@ body {
   height: 50px;
 } */
 
-.voucher-header h1 {
-  font-size: 50px;
-  font-weight: bold;
-}
 
 .voucher-info {
   display: flex;
@@ -55,7 +64,7 @@ body {
 .form-group label {
   display: block;
   margin-bottom: 5px;
-  font-weight: bold;
+  color: #4b4b4b;
 }
 
 .form-group input[type="text"],
@@ -68,6 +77,10 @@ body {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+input:focus {
+  outline: 2px solid blueviolet;
 }
 
 .amount-details {
@@ -139,4 +152,17 @@ body {
 .input#data{
   height: 15px;
   
+}
+
+select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 16px;
+  padding: 4px 8px;
+}
+
+select:focus-visible {
+  outline: 2px solid blueviolet;
+  border: none;
 }
