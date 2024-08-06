@@ -1,3 +1,7 @@
+#root {
+  display: flex;
+  justify-content: center;
+}
 * {
   margin: 0;
   padding: 0;
@@ -25,7 +29,7 @@ body {
   background: white;
   padding: 20px;
   box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.1);
-  width: 90%;
+  width: 100%;
   max-width: 1000px;
   border-radius: 10px;
 }
@@ -89,6 +93,7 @@ input:focus {
 
 .amount-details label {
   font-weight: bold;
+  color: #4b4b4b;
 }
 
 .amount-inputs {
@@ -111,6 +116,7 @@ input:focus {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 20px;
+  color: #4b4b4b;
 }
 
 .signature {
@@ -141,6 +147,7 @@ input:focus {
   overflow: hidden;
   width: 300px;
   height: 100px;
+  margin: 10px 0;
 }
 
 #filterImage {
@@ -165,4 +172,33 @@ select {
 select:focus-visible {
   outline: 2px solid blueviolet;
   border: none;
+}
+
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+
+}
+
+input[type="date"] {
+  padding: 7px!important;
+  width: 150px!important;
+}
+
+
+@media only screen and (max-width: 700px) {
+  .voucher-container {
+    height: 100vh;
+    form {
+      height: 100%;
+    }
+  }
+  .wrapper {
+    flex-direction: column;
+  }
+
+  .voucher-info {
+    justify-content: flex-start;
+  }
 }

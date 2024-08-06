@@ -54,7 +54,6 @@ const VoucherForm = () => {
     };
 
     if (formData.filter) {
-      // Set current date when filter is selected
       const currentDate = new Date().toISOString().split("T")[0];
       setFormData((prevData) => ({
         ...prevData,
@@ -65,6 +64,8 @@ const VoucherForm = () => {
     }
   }, [formData.filter, url]);
 
+  const date = Date.now();
+  const todayDate = new Date(date).toDateString();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -189,52 +190,54 @@ const VoucherForm = () => {
       <ToastContainer />
       <div className="voucher-container">
         <form id="voucherForm" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="filter">Filter:</label>
-            <select
-              id="filter"
-              name="filter"
-              value={formData.filter}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select Filter</option>
-              <option value="Contentstack">Contentstack</option>
-              <option value="Surfboard">Surfboard</option>
-              <option value="RawEngineering">Raw Engineering</option>
-            </select>
-            <div id="filterImageContainer">
-              <img
-                id="filterImage"
-                src={
-                  formData.filter ? `/${filterImageMap[formData.filter]}` : ""
-                }
-                alt="Filter"
-                style={{ display: formData.filter ? "block" : "none" }}
-              />
-            </div>
-          </div>
-          <div className="voucher-info">
+          <div className="wrapper">
             <div className="form-group">
-              <label htmlFor="voucher-no">Voucher No.</label>
-              <input
-                type="text"
-                id="voucher-no"
-                name="voucherNo"
-                value={formData.voucherNo}
-                readOnly
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="date">Date</label>
-              <input
-                type="date"
-                id="date"
-                name="date"
-                value={formData.date}
+              <label htmlFor="filter">Filter:</label>
+              <select
+                id="filter"
+                name="filter"
+                value={formData.filter}
                 onChange={handleChange}
                 required
-              />
+              >
+                <option value="">Select Filter</option>
+                <option value="Contentstack">Contentstack</option>
+                <option value="Surfboard">Surfboard</option>
+                <option value="RawEngineering">Raw Engineering</option>
+              </select>
+              <div id="filterImageContainer">
+                <img
+                  id="filterImage"
+                  src={
+                    formData.filter ? `/${filterImageMap[formData.filter]}` : ""
+                  }
+                  alt="Filter"
+                  style={{ display: formData.filter ? "block" : "none" }}
+                />
+              </div>
+            </div>
+            <div className="voucher-info">
+              <div className="form-group">
+                <label htmlFor="voucher-no">Voucher No.</label>
+                <input
+                  type="text"
+                  id="voucher-no"
+                  name="voucherNo"
+                  value={formData.voucherNo}
+                  readOnly
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="date">Date</label>
+                <input
+                  type="date"
+                  id="date"
+                  name="date" 
+                  value={formData.date}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
           </div>
           <div className="form-group">
@@ -283,7 +286,7 @@ const VoucherForm = () => {
           <div className="form-group">
             <label htmlFor="amount">The sum of Rs.</label>
             <input
-              type="number"
+              type="text"
               id="amount"
               name="amount"
               value={formData.amount}
@@ -349,11 +352,7 @@ const VoucherForm = () => {
             </div>
           </div>
           <div className="form-group">
-            <button
-              type="submit"
-              className="submit-button"
-              disabled={loading}
-            >
+            <button type="submit" className="submit-button" disabled={loading}>
               {loading ? "Submitting..." : "Submit"}
             </button>
           </div>
