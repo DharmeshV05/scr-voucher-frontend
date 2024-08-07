@@ -92,7 +92,6 @@ input:focus {
 }
 
 .amount-details label {
-  font-weight: bold;
   color: #4b4b4b;
 }
 
@@ -128,7 +127,6 @@ input:focus {
 .signature label {
   display: block;
   margin-bottom: 5px;
-  font-weight: bold;
 }
 
 .signature input {
