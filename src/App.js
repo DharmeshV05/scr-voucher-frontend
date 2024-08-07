@@ -284,7 +284,7 @@ const VoucherForm = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="amount">The sum of Rs.</label>
+            <label htmlFor="amount">Amount Rs.</label>
             <input
               type="text"
               id="amount"
@@ -297,7 +297,7 @@ const VoucherForm = () => {
             />
           </div>
           <div className="amount-details">
-            <label htmlFor="amountRs">Amount</label>
+            <label htmlFor="amountRs">The Sum</label>
             <div className="amount-inputs">
               <input
                 type="text"
