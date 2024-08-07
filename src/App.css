@@ -7,6 +7,10 @@
   padding: 0;
   box-sizing: border-box;
 }
+.m0 {
+  margin: 0!important;
+}
+
 body {
   font-family: Arial, sans-serif;
   display: flex;
@@ -84,7 +88,7 @@ body {
 }
 
 input:focus {
-  outline: 2px solid blueviolet;
+  outline: 1px solid blueviolet;
 }
 
 .amount-details {
@@ -168,7 +172,7 @@ select {
 }
 
 select:focus-visible {
-  outline: 2px solid blueviolet;
+  outline: 1px solid blueviolet;
   border: none;
 }
 
@@ -189,7 +193,12 @@ input[type="date"] {
   .wrapper {
     flex-direction: column;
   }
-
+  .submit-button {
+    font-size: 16px;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 4px;
+  }
   .voucher-info {
     justify-content: flex-start;
   }

@@ -292,7 +292,7 @@ const VoucherForm = () => {
               value={formData.amount}
               onChange={handleChange}
               className="amount-input"
-              placeholder="Enter amount in numbers"
+              placeholder="amount in numbers"
               required
             />
           </div>
@@ -304,7 +304,7 @@ const VoucherForm = () => {
                 id="amountRs"
                 name="amountRs"
                 value={formData.amountRs}
-                placeholder="Show numbers in words"
+                placeholder="amount in words"
                 readOnly
               />
             </div>
@@ -351,7 +351,7 @@ const VoucherForm = () => {
               />
             </div>
           </div>
-          <div className="form-group">
+          <div className="form-group m0">
             <button type="submit" className="submit-button" disabled={loading}>
               {loading ? "Submitting..." : "Submit"}
             </button>
