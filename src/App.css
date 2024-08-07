@@ -12,7 +12,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
   background-color: #f4f4f4;
 }
@@ -188,12 +188,6 @@ input[type="date"] {
 
 
 @media only screen and (max-width: 700px) {
-  .voucher-container {
-    height: 100vh;
-    form {
-      height: 100%;
-    }
-  }
   .wrapper {
     flex-direction: column;
   }
