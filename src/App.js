@@ -192,7 +192,7 @@ const VoucherForm = () => {
         <form id="voucherForm" onSubmit={handleSubmit}>
           <div className="wrapper">
             <div className="form-group">
-              <label htmlFor="filter">Filter:</label>
+              <label htmlFor="filter">Select Company</label>
               <select
                 id="filter"
                 name="filter"
@@ -200,7 +200,7 @@ const VoucherForm = () => {
                 onChange={handleChange}
                 required
               >
-                <option value="">Select Filter</option>
+                <option value="">Select Options</option>
                 <option value="Contentstack">Contentstack</option>
                 <option value="Surfboard">Surfboard</option>
                 <option value="RawEngineering">Raw Engineering</option>
