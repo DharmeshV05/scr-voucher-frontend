@@ -114,6 +114,34 @@ const VoucherForm = () => {
     }
   };
 
+  const handleReset = async () => {
+    try {
+      setLoading(true);
+      await axios.post(`${url}/reset`);
+      setFormData({
+        filter: "",
+        voucherNo: "",
+        date: "",
+        payTo: "",
+        accountHead: "",
+        paidBy: "",
+        account: "",
+        amount: "",
+        amountRs: "",
+        preparedBy: "",
+        checkedBy: "",
+        approvedBy: "",
+        receiverSignature: "",
+      });
+      toast.success("Form and data have been reset successfully!");
+    } catch (error) {
+      console.error("Error resetting data:", error);
+      toast.error("Failed to reset data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <ToastContainer />
@@ -161,7 +189,7 @@ const VoucherForm = () => {
                 <input
                   type="date"
                   id="date"
-                  name="date" 
+                  name="date"
                   value={formData.date}
                   onChange={handleChange}
                   required
@@ -283,6 +311,14 @@ const VoucherForm = () => {
           <div className="form-group m0">
             <button type="submit" className="submit-button" disabled={loading}>
               {loading ? "Submitting..." : "Submit"}
+            </button>
+            <button
+              type="button"
+              className="reset-button"
+              onClick={handleReset}
+              disabled={loading}
+            >
+              {loading ? "Resetting..." : "Reset"}
             </button>
           </div>
         </form>
