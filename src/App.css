@@ -21,7 +21,7 @@ body {
   background-color: #f4f4f4;
 }
 .submit-button {
-  background-color: blueviolet;
+  background-color: #6c5ce7;
   color: white;
   font-size: 18px;
   border: none;
@@ -88,7 +88,7 @@ body {
 }
 
 input:focus {
-  outline: 1px solid blueviolet;
+  outline: 2px solid #7c4dff;
 }
 
 .amount-details {
@@ -172,7 +172,7 @@ select {
 }
 
 select:focus-visible {
-  outline: 1px solid blueviolet;
+  outline: 2px solid #7c4dff;;
   border: none;
 }
 
@@ -204,17 +204,3 @@ input[type="date"] {
   }
 }
 
-.reset-button {
-  margin-left: 10px;
-  padding: 10px 20px;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.reset-button:disabled {
-  background-color: #d32f2f;
-  cursor: not-allowed;
-}
