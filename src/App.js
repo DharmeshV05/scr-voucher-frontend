@@ -18,17 +18,20 @@ const VoucherForm = () => {
     date: "",
     payTo: "",
     accountHead: "",
-    paidBy: "",
+    // paidBy: "",
     account: "",
     amount: "",
     amountRs: "",
-    preparedBy: "",
+    // preparedBy: "",
     checkedBy: "",
     approvedBy: "",
     receiverSignature: "",
   });
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Set initial loading state to true
+  const [formLoading, setFormLoading] = useState(false); // Loading state for form submission
+
+  // const [loading, setLoading] = useState(false);
 
   const url =
     process.env.REACT_APP_API_URL || "https://voucher-form-server.onrender.com";
@@ -63,6 +66,13 @@ const VoucherForm = () => {
 
       fetchVoucherNo(formData.filter);
     }
+
+    // loading for demonstration purposes
+    const timer = setTimeout(() => {
+      setLoading(false); 
+    }, 1000); 
+
+    return () => clearTimeout(timer);
   }, [formData.filter, url]);
 
   const date = Date.now();
@@ -117,178 +127,166 @@ const VoucherForm = () => {
   return (
     <>
       <ToastContainer />
-      <div className="voucher-container">
-        <form id="voucherForm" onSubmit={handleSubmit}>
-          <div className="wrapper">
-            <div className="form-group">
-              <label htmlFor="filter">Select Company</label>
-              <select
-                id="filter"
-                name="filter"
-                value={formData.filter}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Options</option>
-                <option value="Contentstack">Contentstack</option>
-                <option value="Surfboard">Surfboard</option>
-                <option value="RawEngineering">Raw Engineering</option>
-              </select>
-              <div id="filterImageContainer">
-                <img
-                  id="filterImage"
-                  src={
-                    formData.filter ? `/${filterImageMap[formData.filter]}` : ""
-                  }
-                  alt="Filter"
-                  style={{ display: formData.filter ? "block" : "none" }}
-                />
+      {loading ? ( // Show loading spinner if loading is true
+        <div className="loading-container">
+          <div className="spinner"></div>
+          <p></p>
+        </div>
+      ) : (
+        <div className="voucher-container">
+          <form id="voucherForm" onSubmit={handleSubmit}>
+            <div className="wrapper">
+              <div className="form-group">
+                <label htmlFor="filter">Select Company</label>
+                <select
+                  id="filter"
+                  name="filter"
+                  value={formData.filter}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Options</option>
+                  <option value="Contentstack">Contentstack</option>
+                  <option value="Surfboard">Surfboard</option>
+                  <option value="RawEngineering">Raw Engineering</option>
+                </select>
+                <div id="filterImageContainer">
+                  <img
+                    id="filterImage"
+                    src={
+                      formData.filter
+                        ? `/${filterImageMap[formData.filter]}`
+                        : ""
+                    }
+                    alt="Filter"
+                    style={{ display: formData.filter ? "block" : "none" }}
+                  />
+                </div>
+              </div>
+              <div className="voucher-info">
+                <div className="form-group">
+                  <label htmlFor="voucher-no">Voucher No.</label>
+                  <input
+                    type="text"
+                    id="voucher-no"
+                    name="voucherNo"
+                    value={formData.voucherNo}
+                    readOnly
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="date">Date</label>
+                  <input
+                    type="date"
+                    id="date"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
               </div>
             </div>
-            <div className="voucher-info">
-              <div className="form-group">
-                <label htmlFor="voucher-no">Voucher No.</label>
+            <div className="form-group">
+              <label htmlFor="payTo">Pay To</label>
+              <input
+                type="text"
+                id="payTo"
+                name="payTo"
+                value={formData.payTo}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="accountHead">Account Head</label>
+              <input
+                type="text"
+                id="accountHead"
+                name="accountHead"
+                value={formData.accountHead}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="account">Towards the Account</label>
+              <input
+                type="text"
+                id="account"
+                name="account"
+                value={formData.account}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="amount">Amount Rs.</label>
+              <input
+                type="number"
+                id="amount"
+                name="amount"
+                value={formData.amount}
+                onChange={handleChange}
+                className="amount-input"
+                placeholder="amount in numbers"
+                min="0"
+                step="0.01"
+                required
+              />
+            </div>
+            <div className="amount-details">
+              <label htmlFor="amountRs">The Sum</label>
+              <div className="amount-inputs">
                 <input
                   type="text"
-                  id="voucher-no"
-                  name="voucherNo"
-                  value={formData.voucherNo}
+                  id="amountRs"
+                  name="amountRs"
+                  value={formData.amountRs}
+                  placeholder="amount in words"
                   readOnly
                 />
               </div>
-              <div className="form-group">
-                <label htmlFor="date">Date</label>
+            </div>
+            <div className="signatures">
+              <div className="signature">
+                <label htmlFor="checkedBy">Checked By</label>
                 <input
-                  type="date"
-                  id="date"
-                  name="date" 
-                  value={formData.date}
+                  type="text"
+                  id="checkedBy"
+                  name="checkedBy"
+                  value={formData.checkedBy}
                   onChange={handleChange}
-                  required
+                />
+              </div>
+              <div className="signature">
+                <label htmlFor="approvedBy">Approved By</label>
+                <input
+                  type="text"
+                  id="approvedBy"
+                  name="approvedBy"
+                  value={formData.approvedBy}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="signature">
+                <label htmlFor="receiverSignature">Receiver Signature</label>
+                <input
+                  type="text"
+                  id="receiverSignature"
+                  name="receiverSignature"
+                  value={formData.receiverSignature}
+                  onChange={handleChange}
                 />
               </div>
             </div>
-          </div>
-          <div className="form-group">
-            <label htmlFor="payTo">Pay To</label>
-            <input
-              type="text"
-              id="payTo"
-              name="payTo"
-              value={formData.payTo}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="accountHead">Account Head</label>
-            <input
-              type="text"
-              id="accountHead"
-              name="accountHead"
-              value={formData.accountHead}
-              onChange={handleChange}
-            />
-          </div>
-          {/* <div className="form-group">
-            <label htmlFor="paidBy">Paid By</label>
-            <input
-              type="text"
-              id="paidBy"
-              name="paidBy"
-              value={formData.paidBy}
-              onChange={handleChange}
-              required
-            />
-          </div> */}
-          <div className="form-group">
-            <label htmlFor="account">Towards the Account</label>
-            <input
-              type="text"
-              id="account"
-              name="account"
-              value={formData.account}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="amount">Amount Rs.</label>
-            <input
-              type="number"
-              id="amount"
-              name="amount"
-              value={formData.amount}
-              onChange={handleChange}
-              className="amount-input"
-              placeholder="amount in numbers"
-              min="0"
-              step="0.01"
-              required
-            />
-          </div>
-          <div className="amount-details">
-            <label htmlFor="amountRs">The Sum</label>
-            <div className="amount-inputs">
-              <input
-                type="text"
-                id="amountRs"
-                name="amountRs"
-                value={formData.amountRs}
-                placeholder="amount in words"
-                readOnly
-              />
+            <div className="form-group m0">
+              <button type="submit" className="submit-button" disabled={formLoading}>
+                {formLoading ? "Submitting..." : "Submit"}
+              </button>
             </div>
-          </div>
-          <div className="signatures">
-            {/* <div className="signature">
-              <label htmlFor="preparedBy">Prepared By</label>
-              <input
-                type="text"
-                id="preparedBy"
-                name="preparedBy"
-                value={formData.preparedBy}
-                onChange={handleChange}
-              />
-            </div> */}
-            <div className="signature">
-              <label htmlFor="checkedBy">Checked By</label>
-              <input
-                type="text"
-                id="checkedBy"
-                name="checkedBy"
-                value={formData.checkedBy}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="signature">
-              <label htmlFor="approvedBy">Approved By</label>
-              <input
-                type="text"
-                id="approvedBy"
-                name="approvedBy"
-                value={formData.approvedBy}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="signature">
-              <label htmlFor="receiverSignature">Receiver Signature</label>
-              <input
-                type="text"
-                id="receiverSignature"
-                name="receiverSignature"
-                value={formData.receiverSignature}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className="form-group m0">
-            <button type="submit" className="submit-button" disabled={loading}>
-              {loading ? "Submitting..." : "Submit"}
-            </button>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
+      )}
     </>
   );
 };
