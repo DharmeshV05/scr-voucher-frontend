@@ -215,13 +215,15 @@ const VoucherForm = () => {
           <div className="form-group">
             <label htmlFor="amount">Amount Rs.</label>
             <input
-              type="text"
+              type="number"
               id="amount"
               name="amount"
               value={formData.amount}
               onChange={handleChange}
               className="amount-input"
               placeholder="amount in numbers"
+              min="0"
+              step="0.01"
               required
             />
           </div>
