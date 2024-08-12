@@ -190,7 +190,7 @@ const VoucherForm = () => {
               onChange={handleChange}
             />
           </div>
-          <div className="form-group">
+          {/* <div className="form-group">
             <label htmlFor="paidBy">Paid By</label>
             <input
               type="text"
@@ -200,7 +200,7 @@ const VoucherForm = () => {
               onChange={handleChange}
               required
             />
-          </div>
+          </div> */}
           <div className="form-group">
             <label htmlFor="account">Towards the Account</label>
             <input
@@ -241,7 +241,7 @@ const VoucherForm = () => {
             </div>
           </div>
           <div className="signatures">
-            <div className="signature">
+            {/* <div className="signature">
               <label htmlFor="preparedBy">Prepared By</label>
               <input
                 type="text"
@@ -250,7 +250,7 @@ const VoucherForm = () => {
                 value={formData.preparedBy}
                 onChange={handleChange}
               />
-            </div>
+            </div> */}
             <div className="signature">
               <label htmlFor="checkedBy">Checked By</label>
               <input
