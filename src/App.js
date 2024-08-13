@@ -123,7 +123,36 @@ const VoucherForm = () => {
       setLoading(false);
     }
   };
+// reset button
+  const handleReset = async () => {
+    try {
+      setLoading(true);
+      await axios.post(`${url}/reset`);
+      setFormData({
+        filter: "",
+        voucherNo: "",
+        date: "",
+        payTo: "",
+        accountHead: "",
+        paidBy: "",
+        account: "",
+        amount: "",
+        amountRs: "",
+        preparedBy: "",
+        checkedBy: "",
+        approvedBy: "",
+        receiverSignature: "",
+      });
+      toast.success("Form and data have been reset successfully!");
+    } catch (error) {
+      console.error("Error resetting data:", error);
+      toast.error("Failed to reset data");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+// 
   return (
     <>
       <ToastContainer />
@@ -283,6 +312,16 @@ const VoucherForm = () => {
               <button type="submit" className="submit-button" disabled={formLoading}>
                 {formLoading ? "Submitting..." : "Submit"}
               </button>
+              {/* reset button */}
+              <button
+              type="button"
+              className="reset-button"
+              onClick={handleReset}
+              disabled={loading}
+            >
+              {loading ? "Resetting..." : "Reset"}
+            </button>
+            {/* reset button */}
             </div>
           </form>
         </div>

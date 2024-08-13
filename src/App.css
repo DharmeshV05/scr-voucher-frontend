@@ -214,7 +214,7 @@ input[type="date"] {
 
 .spinner {
   border: 8px solid #f3f3f3; 
-  border-top: 8px solid #6c5ce7; /* Blue */
+  border-top: 8px solid #6c5ce7;
   border-radius: 50%;
   width: 60px;
   height: 60px;
@@ -224,4 +224,19 @@ input[type="date"] {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+/* reset button */
+.reset-button {
+  margin-left: 10px;
+  padding: 10px 20px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reset-button:disabled {
+  background-color: #d32f2f;
+  cursor: not-allowed;
 }
