@@ -11,6 +11,7 @@ const filterImageMap = {
   RawEngineering: "raw.png",
 };
 
+
 const VoucherForm = () => {
   const [formData, setFormData] = useState({
     filter: "",
@@ -18,16 +19,20 @@ const VoucherForm = () => {
     date: "",
     payTo: "",
     accountHead: "",
+    // paidBy: "",
     account: "",
     amount: "",
     amountRs: "",
+    // preparedBy: "",
     checkedBy: "",
     approvedBy: "",
     receiverSignature: "",
   });
 
-  const [loading, setLoading] = useState(true);
-  const [formLoading, setFormLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Set initial loading state to true
+  const [formLoading, setFormLoading] = useState(false); // Loading state for form submission
+
+  // const [loading, setLoading] = useState(false);
 
   const url =
     process.env.REACT_APP_API_URL || "https://voucher-form-server.onrender.com";
@@ -63,16 +68,16 @@ const VoucherForm = () => {
       fetchVoucherNo(formData.filter);
     }
 
-    // Optional: Keep server warm by making a periodic request
-    const keepServerWarm = setInterval(() => {
-      axios.get(`${url}/keep-alive`).catch((error) => {
-        console.warn("Server keep-alive failed:", error);
-      });
-    }, 10 * 60 * 1000); // Every 10 minutes
+    // loading for demonstration purposes
+    const timer = setTimeout(() => {
+      setLoading(false); 
+    }, 1000); 
 
-    return () => clearInterval(keepServerWarm);
+    return () => clearTimeout(timer);
   }, [formData.filter, url]);
 
+  const date = Date.now();
+  const todayDate = new Date(date).toDateString();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -102,7 +107,7 @@ const VoucherForm = () => {
     event.preventDefault();
 
     try {
-      setFormLoading(true);
+      setLoading(true);
       const response = await axios.post(`${url}/submit`, formData);
 
       if (response.status === 200) {
@@ -116,10 +121,10 @@ const VoucherForm = () => {
       console.error("Error submitting data:", error);
       toast.error("Failed to submit data");
     } finally {
-      setFormLoading(false);
+      setLoading(false);
     }
   };
-
+// reset button
   const handleReset = async () => {
     try {
       setLoading(true);
@@ -130,9 +135,11 @@ const VoucherForm = () => {
         date: "",
         payTo: "",
         accountHead: "",
+        // paidBy: "",
         account: "",
         amount: "",
         amountRs: "",
+        // preparedBy: "",
         checkedBy: "",
         approvedBy: "",
         receiverSignature: "",
@@ -146,12 +153,14 @@ const VoucherForm = () => {
     }
   };
 
+// 
   return (
     <>
       <ToastContainer />
-      {loading ? (
+      {loading ? ( // Show loading spinner if loading is true
         <div className="loading-container">
           <div className="spinner"></div>
+          <p></p>
         </div>
       ) : (
         <div className="voucher-container">
@@ -304,14 +313,16 @@ const VoucherForm = () => {
               <button type="submit" className="submit-button" disabled={formLoading}>
                 {formLoading ? "Submitting..." : "Submit"}
               </button>
+              {/* reset button */}
               <button
-                type="button"
-                className="reset-button"
-                onClick={handleReset}
-                disabled={loading}
-              >
-                {loading ? "Resetting..." : "Reset"}
-              </button>
+              type="button"
+              className="reset-button"
+              onClick={handleReset}
+              disabled={loading}
+            >
+              {loading ? "Resetting..." : "Reset"}
+            </button>
+            {/* reset button */}
             </div>
           </form>
         </div>
