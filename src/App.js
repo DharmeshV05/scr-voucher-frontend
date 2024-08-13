@@ -11,7 +11,6 @@ const filterImageMap = {
   RawEngineering: "raw.png",
 };
 
-
 const VoucherForm = () => {
   const [formData, setFormData] = useState({
     filter: "",
@@ -19,20 +18,17 @@ const VoucherForm = () => {
     date: "",
     payTo: "",
     accountHead: "",
-    // paidBy: "",
     account: "",
     amount: "",
     amountRs: "",
-    // preparedBy: "",
     checkedBy: "",
     approvedBy: "",
     receiverSignature: "",
   });
 
-  const [loading, setLoading] = useState(true); // Set initial loading state to true
-  const [formLoading, setFormLoading] = useState(false); // Loading state for form submission
-
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); 
+  const [formLoading, setFormLoading] = useState(false);
+  const [resetEnabled, setResetEnabled] = useState(false); // State for enabling/disabling reset button
 
   const url =
     process.env.REACT_APP_API_URL || "https://voucher-form-server.onrender.com";
@@ -68,7 +64,6 @@ const VoucherForm = () => {
       fetchVoucherNo(formData.filter);
     }
 
-    // loading for demonstration purposes
     const timer = setTimeout(() => {
       setLoading(false); 
     }, 1000); 
@@ -78,6 +73,7 @@ const VoucherForm = () => {
 
   const date = Date.now();
   const todayDate = new Date(date).toDateString();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -124,7 +120,7 @@ const VoucherForm = () => {
       setLoading(false);
     }
   };
-// reset button
+
   const handleReset = async () => {
     try {
       setLoading(true);
@@ -135,16 +131,15 @@ const VoucherForm = () => {
         date: "",
         payTo: "",
         accountHead: "",
-        // paidBy: "",
         account: "",
         amount: "",
         amountRs: "",
-        // preparedBy: "",
         checkedBy: "",
         approvedBy: "",
         receiverSignature: "",
       });
       toast.success("Form and data have been reset successfully!");
+      setResetEnabled(false); // Disable reset button after reset
     } catch (error) {
       console.error("Error resetting data:", error);
       toast.error("Failed to reset data");
@@ -153,11 +148,10 @@ const VoucherForm = () => {
     }
   };
 
-// 
   return (
     <>
       <ToastContainer />
-      {loading ? ( // Show loading spinner if loading is true
+      {loading ? (
         <div className="loading-container">
           <div className="spinner"></div>
           <p></p>
@@ -313,16 +307,24 @@ const VoucherForm = () => {
               <button type="submit" className="submit-button" disabled={formLoading}>
                 {formLoading ? "Submitting..." : "Submit"}
               </button>
-              {/* reset button */}
+              {/* Reset button */}
+              <label className="enable-reset">
+                <input
+                  type="checkbox"
+                  checked={resetEnabled}
+                  onChange={(e) => setResetEnabled(e.target.checked)}
+                />
+                Enable Reset
+              </label>
               <button
-              type="button"
-              className="reset-button"
-              onClick={handleReset}
-              disabled={loading}
-            >
-              {loading ? "Resetting..." : "Reset"}
-            </button>
-            {/* reset button */}
+                type="button"
+                className="reset-button"
+                onClick={handleReset}
+                disabled={!resetEnabled || loading}
+              >
+                {loading ? "Resetting..." : "Reset"}
+              </button>
+              {/* End reset button */}
             </div>
           </form>
         </div>
