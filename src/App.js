@@ -26,9 +26,10 @@ const VoucherForm = () => {
     receiverSignature: "",
   });
 
-  const [loading, setLoading] = useState(true); 
-  const [formLoading, setFormLoading] = useState(false);
-  const [resetEnabled, setResetEnabled] = useState(false); // State for enabling/disabling reset button
+  const [loading, setLoading] = useState(true); // Set initial loading state to true
+  const [formLoading, setFormLoading] = useState(false); // Loading state for form submission
+
+  // const [loading, setLoading] = useState(false);
 
   const url =
     process.env.REACT_APP_API_URL || "https://voucher-form-server.onrender.com";
@@ -64,6 +65,7 @@ const VoucherForm = () => {
       fetchVoucherNo(formData.filter);
     }
 
+    // loading for demonstration purposes
     const timer = setTimeout(() => {
       setLoading(false); 
     }, 1000); 
@@ -73,7 +75,6 @@ const VoucherForm = () => {
 
   const date = Date.now();
   const todayDate = new Date(date).toDateString();
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -121,37 +122,12 @@ const VoucherForm = () => {
     }
   };
 
-  const handleReset = async () => {
-    try {
-      setLoading(true);
-      await axios.post(`${url}/reset`);
-      setFormData({
-        filter: "",
-        voucherNo: "",
-        date: "",
-        payTo: "",
-        accountHead: "",
-        account: "",
-        amount: "",
-        amountRs: "",
-        checkedBy: "",
-        approvedBy: "",
-        receiverSignature: "",
-      });
-      toast.success("Form and data have been reset successfully!");
-      setResetEnabled(false); // Disable reset button after reset
-    } catch (error) {
-      console.error("Error resetting data:", error);
-      toast.error("Failed to reset data");
-    } finally {
-      setLoading(false);
-    }
-  };
+  
 
   return (
     <>
       <ToastContainer />
-      {loading ? (
+      {loading ? ( // Show loading spinner if loading is true
         <div className="loading-container">
           <div className="spinner"></div>
           <p></p>
@@ -307,24 +283,6 @@ const VoucherForm = () => {
               <button type="submit" className="submit-button" disabled={formLoading}>
                 {formLoading ? "Submitting..." : "Submit"}
               </button>
-              {/* Reset button */}
-              <label className="enable-reset">
-                <input
-                  type="checkbox"
-                  checked={resetEnabled}
-                  onChange={(e) => setResetEnabled(e.target.checked)}
-                />
-                Enable Reset
-              </label>
-              <button
-                type="button"
-                className="reset-button"
-                onClick={handleReset}
-                disabled={!resetEnabled || loading}
-              >
-                {loading ? "Resetting..." : "Reset"}
-              </button>
-              {/* End reset button */}
             </div>
           </form>
         </div>
