@@ -11,25 +11,25 @@ const filterImageMap = {
   RawEngineering: "raw.png",
 };
 
+const initialValues = {
+  filter: "",
+  voucherNo: "",
+  date: new Date().toISOString().split("T")[0], // Set default date to today
+  payTo: "",
+  accountHead: "",
+  account: "",
+  amount: "",
+  amountRs: "",
+  checkedBy: "",
+  approvedBy: "",
+  receiverSignature: "",
+};
+
+
 const VoucherForm = () => {
-  const [formData, setFormData] = useState({
-    filter: "",
-    voucherNo: "",
-    date: "",
-    payTo: "",
-    accountHead: "",
-    account: "",
-    amount: "",
-    amountRs: "",
-    checkedBy: "",
-    approvedBy: "",
-    receiverSignature: "",
-  });
-
-  const [loading, setLoading] = useState(true); // Set initial loading state to true
-  const [formLoading, setFormLoading] = useState(false); // Loading state for form submission
-
-  // const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState(initialValues);
+  const [loading, setLoading] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
 
   const url =
     process.env.REACT_APP_API_URL || "https://voucher-form-server.onrender.com";
@@ -56,25 +56,10 @@ const VoucherForm = () => {
     };
 
     if (formData.filter) {
-      const currentDate = new Date().toISOString().split("T")[0];
-      setFormData((prevData) => ({
-        ...prevData,
-        date: currentDate,
-      }));
-
       fetchVoucherNo(formData.filter);
     }
-
-    // loading for demonstration purposes
-    const timer = setTimeout(() => {
-      setLoading(false); 
-    }, 1000); 
-
-    return () => clearTimeout(timer);
   }, [formData.filter, url]);
 
-  const date = Date.now();
-  const todayDate = new Date(date).toDateString();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -104,11 +89,12 @@ const VoucherForm = () => {
     event.preventDefault();
 
     try {
-      setLoading(true);
+      setFormLoading(true); // Set formLoading state to true
       const response = await axios.post(`${url}/submit`, formData);
 
       if (response.status === 200) {
         toast.success("Data submitted successfully and PDF uploaded!");
+        setFormData(initialValues); // Reset form data to initial values
         console.log(`Sheet URL: ${response.data.sheetURL}`);
         console.log(`PDF File ID: ${response.data.pdfFileId}`);
       } else {
@@ -118,19 +104,17 @@ const VoucherForm = () => {
       console.error("Error submitting data:", error);
       toast.error("Failed to submit data");
     } finally {
-      setLoading(false);
+      setFormLoading(false); // Reset formLoading state to false
     }
   };
-
-  
 
   return (
     <>
       <ToastContainer />
-      {loading ? ( // Show loading spinner if loading is true
+      {loading ? (
         <div className="loading-container">
           <div className="spinner"></div>
-          <p></p>
+          <p>Loading...</p>
         </div>
       ) : (
         <div className="voucher-container">
@@ -158,7 +142,7 @@ const VoucherForm = () => {
                         ? `/${filterImageMap[formData.filter]}`
                         : ""
                     }
-                    alt="Filter"
+                    alt={formData.filter ? formData.filter : "Placeholder"}
                     style={{ display: formData.filter ? "block" : "none" }}
                   />
                 </div>
@@ -280,7 +264,11 @@ const VoucherForm = () => {
               </div>
             </div>
             <div className="form-group m0">
-              <button type="submit" className="submit-button" disabled={formLoading}>
+              <button
+                type="submit"
+                className="submit-button"
+                disabled={formLoading}
+              >
                 {formLoading ? "Submitting..." : "Submit"}
               </button>
             </div>
