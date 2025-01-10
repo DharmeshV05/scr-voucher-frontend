@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import { convertNumberToWords } from "./utils";
 import "./App.css";
 
@@ -25,11 +26,11 @@ const initialValues = {
   receiverSignature: "",
 };
 
-
 const VoucherForm = () => {
   const [formData, setFormData] = useState(initialValues);
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
+  const { transcript, listening, resetTranscript } = useSpeechRecognition();
 
   const url =
     process.env.REACT_APP_API_URL || "https://voucher-form-server.onrender.com";
@@ -85,18 +86,41 @@ const VoucherForm = () => {
     convertAmountToWords();
   }, [formData.amount]);
 
+  const handleVoiceInput = (input) => {
+    const amountMatch = input.match(/\u20b9?(\d+(,\d{3})*(\.\d{2})?)/);
+    const payToMatch = input.match(/to ([A-Za-z\s]+)/);
+    const dateMatch = input.match(/on (\d{1,2}(st|nd|rd|th)? [A-Za-z]+)/);
+    const filterMatch = input.match(/for (Contentstack|Surfboard|RawEngineering)/);
+
+    setFormData((prevData) => ({
+      ...prevData,
+      payTo: payToMatch ? payToMatch[1].trim() : prevData.payTo,
+      amount: amountMatch ? amountMatch[1].replace(/,/g, "") : prevData.amount,
+      date: dateMatch ? new Date(dateMatch[1]).toISOString().slice(0, 10) : prevData.date,
+      filter: filterMatch ? filterMatch[1] : prevData.filter,
+    }));
+  };
+
+  const handleVoiceStart = () => {
+    resetTranscript();
+    SpeechRecognition.startListening({ continuous: true });
+  };
+
+  const handleVoiceStop = () => {
+    SpeechRecognition.stopListening();
+    handleVoiceInput(transcript);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      setFormLoading(true); // Set formLoading state to true
+      setFormLoading(true);
       const response = await axios.post(`${url}/submit`, formData);
 
       if (response.status === 200) {
         toast.success("Data submitted successfully and PDF uploaded!");
-        setFormData(initialValues); // Reset form data to initial values
-        console.log(`Sheet URL: ${response.data.sheetURL}`);
-        console.log(`PDF File ID: ${response.data.pdfFileId}`);
+        setFormData(initialValues);
       } else {
         throw new Error(response.data.error);
       }
@@ -104,9 +128,13 @@ const VoucherForm = () => {
       console.error("Error submitting data:", error);
       toast.error("Failed to submit data");
     } finally {
-      setFormLoading(false); // Reset formLoading state to false
+      setFormLoading(false);
     }
   };
+
+  if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
+    return <span>Your browser doesn't support speech recognition.</span>;
+  }
 
   return (
     <>
@@ -118,6 +146,12 @@ const VoucherForm = () => {
         </div>
       ) : (
         <div className="voucher-container">
+          <h2>Voucher Form</h2>
+          <button onClick={handleVoiceStart}>Start Voice Input</button>
+          <button onClick={handleVoiceStop}>Stop Voice Input</button>
+          {listening && <p>Listening...</p>}
+          <p>Transcript: {transcript}</p>
+
           <form id="voucherForm" onSubmit={handleSubmit}>
             <div className="wrapper">
               <div className="form-group">
