@@ -14,7 +14,7 @@ const filterImageMap = {
 const initialValues = {
   filter: "",
   voucherNo: "",
-  date: new Date().toISOString().split("T")[0], // Set default date to today
+  date: new Date().toISOString().split("T")[0], 
   payTo: "",
   accountHead: "",
   account: "",
@@ -46,10 +46,8 @@ const VoucherForm = () => {
         });
     };
 
-    // Ping the server every 30 seconds
     const interval = setInterval(keepServerAlive, 30000);
 
-    // Clean up the interval when the component unmounts
     return () => clearInterval(interval);
   }, [url]);
 
@@ -123,7 +121,7 @@ const VoucherForm = () => {
       console.error("Error submitting data:", error);
       toast.error("Failed to submit data");
     } finally {
-      setFormLoading(false); // Reset formLoading state to false
+      setFormLoading(false); 
     }
   };
 
