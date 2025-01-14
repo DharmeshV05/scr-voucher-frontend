@@ -25,7 +25,6 @@ const initialValues = {
   receiverSignature: "",
 };
 
-
 const VoucherForm = () => {
   const [formData, setFormData] = useState(initialValues);
   const [loading, setLoading] = useState(false);
@@ -33,6 +32,26 @@ const VoucherForm = () => {
 
   const url =
     process.env.REACT_APP_API_URL || "https://voucher-form-server.onrender.com";
+
+  // Server ping mechanism
+  useEffect(() => {
+    const keepServerAlive = () => {
+      axios
+        .get(`${url}/ping`)
+        .then((response) => {
+          console.log("Server is active:", response.data.message);
+        })
+        .catch((error) => {
+          console.error("Error pinging server:", error);
+        });
+    };
+
+    // Ping the server every 30 seconds
+    const interval = setInterval(keepServerAlive, 30000);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(interval);
+  }, [url]);
 
   useEffect(() => {
     const fetchVoucherNo = async (filter) => {
@@ -89,7 +108,7 @@ const VoucherForm = () => {
     event.preventDefault();
 
     try {
-      setFormLoading(true); 
+      setFormLoading(true);
       const response = await axios.post(`${url}/submit`, formData);
 
       if (response.status === 200) {
