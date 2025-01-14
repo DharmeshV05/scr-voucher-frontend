@@ -89,7 +89,7 @@ const VoucherForm = () => {
     event.preventDefault();
 
     try {
-      setFormLoading(true); // Set formLoading state to true
+      setFormLoading(true); 
       const response = await axios.post(`${url}/submit`, formData);
 
       if (response.status === 200) {
