@@ -114,7 +114,7 @@ const VoucherForm = () => {
       {loading ? (
         <div className="loading-container">
           <div className="spinner"></div>
-          <p>Loading...</p>
+          <p></p>
         </div>
       ) : (
         <div className="voucher-container">
