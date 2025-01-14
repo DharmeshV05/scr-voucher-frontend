@@ -172,7 +172,9 @@ const VoucherForm = () => {
                     id="voucher-no"
                     name="voucherNo"
                     value={formData.voucherNo}
-                    readOnly
+                    onChange={(e) =>
+                      setFormData({ ...formData, voucherNo: e.target.value })
+                    }
                   />
                 </div>
                 <div className="form-group">
