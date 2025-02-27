@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SignatureCanvas from "react-signature-canvas"; // Add this dependency
 import { convertNumberToWords } from "./utils";
 import "./App.css";
 
@@ -14,7 +15,7 @@ const filterImageMap = {
 const initialValues = {
   filter: "",
   voucherNo: "",
-  date: new Date().toISOString().split("T")[0], 
+  date: new Date().toISOString().split("T")[0],
   payTo: "",
   accountHead: "",
   account: "",
@@ -22,13 +23,15 @@ const initialValues = {
   amountRs: "",
   checkedBy: "",
   approvedBy: "",
-  receiverSignature: "",
+  receiverSignature: "", // Will store base64 signature
 };
 
 const VoucherForm = () => {
   const [formData, setFormData] = useState(initialValues);
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
+  const [payToSuggestions, setPayToSuggestions] = useState([]);
+  const signatureRef = useRef();
 
   const url =
     process.env.REACT_APP_API_URL || "https://voucher-form-server.onrender.com";
@@ -36,44 +39,41 @@ const VoucherForm = () => {
   // Server ping mechanism
   useEffect(() => {
     const keepServerAlive = () => {
-      axios
-        .get(`${url}/ping`)
-        .then((response) => {
-          console.log("Server is active:", response.data.message);
-        })
-        .catch((error) => {
-          console.error("Error pinging server:", error);
-        });
+      axios.get(`${url}/ping`).then((response) => {
+        console.log("Server is active:", response.data.message);
+      }).catch((error) => {
+        console.error("Error pinging server:", error);
+      });
     };
-
     const interval = setInterval(keepServerAlive, 30000);
-
     return () => clearInterval(interval);
   }, [url]);
 
+  // Fetch voucher number and suggestions
   useEffect(() => {
-    const fetchVoucherNo = async (filter) => {
+    const fetchVoucherNoAndSuggestions = async (filter) => {
       if (filter) {
         try {
           setLoading(true);
-          const response = await axios.get(
-            `${url}/get-voucher-no?filter=${filter}`
-          );
+          const [voucherResponse, suggestionsResponse] = await Promise.all([
+            axios.get(`${url}/get-voucher-no?filter=${filter}`),
+            axios.get(`${url}/get-suggestions?filter=${filter}`), // New endpoint
+          ]);
           setFormData((prevData) => ({
             ...prevData,
-            voucherNo: response.data.voucherNo,
+            voucherNo: voucherResponse.data.voucherNo,
           }));
+          setPayToSuggestions(suggestionsResponse.data.payToSuggestions || []);
         } catch (error) {
-          console.error("Error fetching voucher number:", error);
-          toast.error("Failed to fetch voucher number");
+          console.error("Error fetching data:", error);
+          toast.error("Failed to fetch voucher number or suggestions");
         } finally {
           setLoading(false);
         }
       }
     };
-
     if (formData.filter) {
-      fetchVoucherNo(formData.filter);
+      fetchVoucherNoAndSuggestions(formData.filter);
     }
   }, [formData.filter, url]);
 
@@ -102,16 +102,32 @@ const VoucherForm = () => {
     convertAmountToWords();
   }, [formData.amount]);
 
+  // Handle signature
+  const handleSignatureEnd = () => {
+    const signatureData = signatureRef.current.toDataURL();
+    setFormData((prevData) => ({
+      ...prevData,
+      receiverSignature: signatureData,
+    }));
+  };
+
+  const clearSignature = () => {
+    signatureRef.current.clear();
+    setFormData((prevData) => ({
+      ...prevData,
+      receiverSignature: "",
+    }));
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     try {
       setFormLoading(true);
       const response = await axios.post(`${url}/submit`, formData);
-
       if (response.status === 200) {
         toast.success("Data submitted successfully and PDF uploaded!");
-        setFormData(initialValues); // Reset form data to initial values
+        setFormData(initialValues);
+        clearSignature();
         console.log(`Sheet URL: ${response.data.sheetURL}`);
         console.log(`PDF File ID: ${response.data.pdfFileId}`);
       } else {
@@ -121,7 +137,7 @@ const VoucherForm = () => {
       console.error("Error submitting data:", error);
       toast.error("Failed to submit data");
     } finally {
-      setFormLoading(false); 
+      setFormLoading(false);
     }
   };
 
@@ -172,9 +188,7 @@ const VoucherForm = () => {
                     id="voucher-no"
                     name="voucherNo"
                     value={formData.voucherNo}
-                    onChange={(e) =>
-                      setFormData({ ...formData, voucherNo: e.target.value })
-                    }
+                    readOnly // Controlled by server
                   />
                 </div>
                 <div className="form-group">
@@ -198,8 +212,14 @@ const VoucherForm = () => {
                 name="payTo"
                 value={formData.payTo}
                 onChange={handleChange}
+                list="payToSuggestions"
                 required
               />
+              <datalist id="payToSuggestions">
+                {payToSuggestions.map((suggestion, index) => (
+                  <option key={index} value={suggestion} />
+                ))}
+              </datalist>
             </div>
             <div className="form-group">
               <label htmlFor="accountHead">Account Head</label>
@@ -272,14 +292,16 @@ const VoucherForm = () => {
                 />
               </div>
               <div className="signature">
-                <label htmlFor="receiverSignature">Receiver Signature</label>
-                <input
-                  type="text"
-                  id="receiverSignature"
-                  name="receiverSignature"
-                  value={formData.receiverSignature}
-                  onChange={handleChange}
+                <label>Receiver Signature</label>
+                <SignatureCanvas
+                  ref={signatureRef}
+                  penColor="black"
+                  canvasProps={{ width: 200, height: 100, className: "sigCanvas" }}
+                  onEnd={handleSignatureEnd}
                 />
+                <button type="button" onClick={clearSignature} className="reset-button">
+                  Clear Signature
+                </button>
               </div>
             </div>
             <div className="form-group m0">
